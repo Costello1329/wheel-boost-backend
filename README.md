@@ -12,4 +12,8 @@ Backend solution for WheelBoost app.
 
 ## How to make migrations:
 + Run the next command in terminal: `python3 manage.py makemigrations`.
-+ Run the next command in terminal: `python3 manage.py migrate`.  
++ Run the next command in terminal: `python3 manage.py migrate`.
+
+## How to add superuser:
++ Run the next command in terminal: `python3 manage.py createsuperuser`.  
++ Now you can open `127.0.0.1:8000/admin`
