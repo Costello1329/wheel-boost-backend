@@ -14,7 +14,8 @@ from django.core import serializers
 k_nearest_events_radius_in_kms = 5
 
 
-def get_distance_in_kms (x1, y1, x2, y2):
+# TODO: Use more time-driven metrics:
+def get_distance_in_kms(x1, y1, x2, y2):
     r = 6371
     x1 *= pi / 180
     x2 *= pi / 180
