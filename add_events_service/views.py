@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -14,14 +16,15 @@ class UserView(APIView):
         events = request.data["events"]
 
         for event in events:
+            # datetime.fromisoformat('2011-11-04 00:05:23.283+00:00')
             Event.objects.create(
-                title=event.title,
-                description=event.description,
-                coordinates=event.coordinates,
-                startTime=event.startTime,
-                endTime=event.endTime,
-                price=event.price,
-                peopleCount=event.peopleCount
+                title=event["title"],
+                description=event["description"],
+                coordinates=event["coordinates"],
+                startTime=datetime.fromisoformat(event["startTime"]),
+                endTime=datetime.fromisoformat(event["endTime"]),
+                price=event["price"],
+                peopleCount=event["peopleCount"]
             )
 
         return Response(status=200, content_type="application/json")
