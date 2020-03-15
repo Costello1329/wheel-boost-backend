@@ -30,7 +30,7 @@ def is_this_event_near(driver_x, driver_y, event_x, event_y):
 
 class UserView(APIView):
     def post(self, request):
-        coordinates = request.data["coordinates"]  # 40.7143528;-74.0059731 такого вида
+        coordinates = request.data["coordinates"]
         driver_x, driver_y = coordinates.split(";")
         driver_x, driver_y = float(driver_x), float(driver_y)
         now = datetime.datetime.now()
