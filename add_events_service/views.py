@@ -15,8 +15,8 @@ class UserView(APIView):
                 title=event["title"],
                 description=event["description"],
                 coordinates=event["coordinates"],
-                startTime=datetime.fromisoformat(event["startTime"]),
-                endTime=datetime.fromisoformat(event["endTime"]),
+                startTime=datetime.fromisoformat(event["startTime"][:-1]),
+                endTime=datetime.fromisoformat(event["endTime"][:-1]),
                 price=event["price"],
                 peopleCount=event["peopleCount"]
             )
