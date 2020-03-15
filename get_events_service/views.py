@@ -10,7 +10,6 @@ from math import sin, cos, acos, pi
 from main.models import Event
 from django.core import serializers
 
-
 k_nearest_events_radius_in_kms = 5
 
 
@@ -21,7 +20,7 @@ def get_distance_in_kms(x1, y1, x2, y2):
     x2 *= pi / 180
     y1 *= pi / 180
     y2 *= pi / 180
-    return acos(sin(x1)*sin(x2) + cos(x1)*cos(x2)*cos(y1 - y2)) * r
+    return acos(sin(x1) * sin(x2) + cos(x1) * cos(x2) * cos(y1 - y2)) * r
 
 
 def is_this_event_near(driver_x, driver_y, event_x, event_y):
@@ -41,6 +40,18 @@ class UserView(APIView):
             event_x, event_y = event.coordinates.split(";")
             event_x, event_y = float(event_x), float(event_y)
             if is_this_event_near(driver_x, driver_y, event_x, event_y):
-                events_out.append(event)
-        body = serializers.serialize("json", events_out)
+                event_dict = {
+                    "title": event.title,
+                    "coordinates": event.coordinates,
+                    "description": event.description,
+                    "startTime": event.startTime,
+                    "endTime": event.endTime,
+                    "price": event.price,
+                    "peopleCount": event.peopleCount,
+
+                }
+                events_out.append(event_dict)
+        body = {
+            "events": events_out
+            }
         return Response(body, status=200, content_type="application/json")
