@@ -1,9 +1,4 @@
-import json
-
 from django.db import models
-
-
-# Create your models here.
 
 
 class Event(models.Model):
@@ -14,4 +9,3 @@ class Event(models.Model):
     endTime = models.DateTimeField()
     price = models.IntegerField()
     peopleCount = models.IntegerField()
-
