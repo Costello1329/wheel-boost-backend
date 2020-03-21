@@ -55,8 +55,8 @@ def get_nearest_event(events, driver):
                     "peopleCount": event.peopleCount
                 }
                 events_out.append(event_dict)
-                if len(events_out) != 0:
-                    return events_out
+        if len(events_out) != 0:
+            return events_out
     return events_out
 
 
