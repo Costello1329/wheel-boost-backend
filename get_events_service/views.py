@@ -10,13 +10,13 @@ k_nearest_events_radius_in_kms = 5
 k_expansion_step_in_kms = 1
 k_max_radius = 15
 
-initial_time_deviation = 0.5  # -0.5 hour
-final_time_deviation = 3  # +3 hour
+initial_time_deviation = 0.5  # (-) 0.5 hour
+final_time_deviation = 3  # (+) 3 hour
 
 
 # TODO: Use more time-driven metrics:
 def get_distance_in_kms(first_latitude, first_longitude, second_latitude, second_longitude):
-    r = 6371  # earth's radius.
+    r = 6371  # Earth's radius.
     first_latitude *= pi / 180
     second_latitude *= pi / 180
     first_longitude *= pi / 180
@@ -28,7 +28,7 @@ def get_distance_in_kms(first_latitude, first_longitude, second_latitude, second
     )
 
 
-def is_this_event_near(driver_latitude, driver_longitude, event_latitude, event_longitude,radius):
+def is_this_event_near(driver_latitude, driver_longitude, event_latitude, event_longitude, radius):
     return get_distance_in_kms(
         driver_latitude,
         driver_longitude,
@@ -44,7 +44,7 @@ def get_nearest_event(events, driver):
             event_latitude, event_longitude = event.coordinates.split(";")
             event_latitude, event_longitude = float(event_latitude), float(event_longitude)
 
-            if is_this_event_near(driver.latitude, driver.longitude, event_latitude, event_longitude,current_radius):
+            if is_this_event_near(driver.latitude, driver.longitude, event_latitude, event_longitude, current_radius):
                 event_dict = {
                     "title": event.title,
                     "coordinates": event.coordinates,
