@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 import datetime
 from math import sin, cos, acos, pi
+from itertools import chain
 
 from get_events_service.apps import Driver
 from main.models import Event
@@ -70,7 +71,7 @@ class UserView(APIView):
         infinite_events = Event.objects.filter(isInfinite=True)
         finite_events = Event.objects.filter(
             isInfinite=False, endTime__gte=start_date, endTime__lte=end_date)
-        events = infinite_events + finite_events
+        events = list(chain(infinite_events, finite_events))
         driver = Driver(driver_latitude, driver_longitude)
         events_out = get_nearest_event(events, driver)
         body = {
