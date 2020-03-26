@@ -67,7 +67,10 @@ class UserView(APIView):
         driver_latitude, driver_longitude = float(driver_latitude), float(driver_longitude)
         start_date = datetime.datetime.now() - datetime.timedelta(hours=initial_time_deviation)
         end_date = datetime.datetime.now() + datetime.timedelta(hours=final_time_deviation)
-        events = Event.objects.filter(endTime__gte=start_date, endTime__lte=end_date)
+        infinite_events = Event.objects.filter(isInfinite=True)
+        finite_events = Event.objects.filter(
+            isInfinite=False, endTime__gte=start_date, endTime__lte=end_date)
+        events = infinite_events + finite_events
         driver = Driver(driver_latitude, driver_longitude)
         events_out = get_nearest_event(events, driver)
         body = {

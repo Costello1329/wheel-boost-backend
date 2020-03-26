@@ -10,11 +10,12 @@ class UserView(APIView):
         events = request.data["events"]
 
         for event in events:
-            # datetime.fromisoformat('2011-11-04 00:05:23.283+00:00')
             Event.objects.create(
                 title=event["title"],
                 description=event["description"],
                 coordinates=event["coordinates"],
+                isInfinite=bool(event["isInfinite"]),
+                # datetime.fromisoformat('2011-11-04 00:05:23.283+00:00')
                 startTime=datetime.fromisoformat(event["startTime"]),
                 endTime=datetime.fromisoformat(event["endTime"]),
                 price=event["price"],
