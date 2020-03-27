@@ -53,7 +53,8 @@ def get_nearest_event(events, driver):
                     "startTime": event.startTime,
                     "endTime": event.endTime,
                     "price": event.price,
-                    "peopleCount": event.peopleCount
+                    "peopleCount": event.peopleCount,
+                    "isInfinite" : event.isInfinite
                 }
                 events_out.append(event_dict)
         if len(events_out) != 0:
