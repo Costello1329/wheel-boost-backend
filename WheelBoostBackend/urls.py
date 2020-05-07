@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('get_events', include('get_events_service.urls')),
     path('add_events', include('add_events_service.urls')),
+    path('heat_map', include('heat_map.urls')),
 ]
