@@ -9,7 +9,7 @@ from scipy.stats import norm
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from main.models import Event
+from main.models import Event, HeatMap
 
 scale = 0.001
 
@@ -18,15 +18,15 @@ upper_right_border = (55.98, 38.05)
 lower_left_border = (55.46, 37.29)
 lower_right_border = (55.46, 38.05)
 
-map_size_x = (lower_right_border[1] - lower_left_border[1]) / scale
-map_size_y = (upper_right_border[0] - lower_right_border[0]) / scale
+map_size_x = round((lower_right_border[1] - lower_left_border[1]) / scale)
+map_size_y = round((upper_right_border[0] - lower_right_border[0]) / scale)
 
 initial_time_deviation = 0.5  # (-) 0.5 hour
 final_time_deviation = 3  # (+) 3 hour
 
 
 def update_heat_map():
-    heat_map = np.zeros(map_size_x, map_size_y)
+    heat_map = np.zeros((map_size_x, map_size_y))
     infinite_events = Event.objects.filter(isInfinite=True)
     start_date = datetime.datetime.now() - datetime.timedelta(hours=initial_time_deviation)
     end_date = datetime.datetime.now() + datetime.timedelta(hours=final_time_deviation)
@@ -35,7 +35,14 @@ def update_heat_map():
     events = list(chain(infinite_events, finite_events))
     for event in events:
         markup_heat_map(event, heat_map)
-    print(heat_map.tostring())
+    HeatMap.objects.all().delete()
+    try:
+        db = HeatMap.objects.create(data=heat_map.tobytes())
+        db.save()
+    except:
+        print()
+    a = np.frombuffer(HeatMap.objects.all()[0].data)
+    print("1")
 
 
 def check_heat_map_index(x, y):
@@ -46,8 +53,8 @@ def check_heat_map_index(x, y):
 
 def get_weights(event, loop):
     distribution = norm.pdf(loop, 0)
-    people_count_coff = event.peopleCount * 1, 25
-    price_coff = event.price * 0, 10
+    people_count_coff = event.peopleCount * 1.25
+    price_coff = event.price * 0.10
     return distribution * people_count_coff * price_coff
 
 
@@ -92,8 +99,8 @@ def markup_heat_map(event, heat_map):
 
 def get_cell_location(latitude, longitude):
     round_scale = -round(log(0.001, 10))
-    latitude_location = int((lower_right_border[0] - round(latitude, round_scale)) / scale) - 1
-    longitude_location = int((lower_right_border[1] - round(longitude, round_scale)) / scale) - 1
+    latitude_location = - int((lower_left_border[0] - round(latitude, round_scale)) / scale) - 1
+    longitude_location = - int((lower_left_border[1] - round(longitude, round_scale)) / scale) - 1
     return latitude_location, longitude_location
 
 
