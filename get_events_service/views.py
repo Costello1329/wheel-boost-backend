@@ -5,6 +5,7 @@ from math import sin, cos, acos, pi
 from itertools import chain
 
 from get_events_service.apps import Driver
+from heat_map.views import check_fit_event
 from main.models import Event
 
 k_nearest_events_radius_in_kms = 5
@@ -29,13 +30,13 @@ def get_distance_in_kms(first_latitude, first_longitude, second_latitude, second
     )
 
 
-def is_this_event_near(driver_latitude, driver_longitude, event_latitude, event_longitude, radius):
+def is_this_event_fit(driver_latitude, driver_longitude, event_latitude, event_longitude, radius):
     return get_distance_in_kms(
         driver_latitude,
         driver_longitude,
         event_latitude,
         event_longitude
-    ) < radius
+    ) < radius or check_fit_event((event_latitude, event_longitude))
 
 
 def get_nearest_event(events, driver):
@@ -45,7 +46,7 @@ def get_nearest_event(events, driver):
             event_latitude, event_longitude = event.coordinates.split(";")
             event_latitude, event_longitude = float(event_latitude), float(event_longitude)
 
-            if is_this_event_near(driver.latitude, driver.longitude, event_latitude, event_longitude, current_radius):
+            if is_this_event_fit(driver.latitude, driver.longitude, event_latitude, event_longitude, current_radius):
                 event_dict = {
                     "title": event.title,
                     "coordinates": event.coordinates,

@@ -35,14 +35,7 @@ def update_heat_map():
     events = list(chain(infinite_events, finite_events))
     for event in events:
         markup_heat_map(event, heat_map)
-    HeatMap.objects.all().delete()
-    try:
-        db = HeatMap.objects.create(data=heat_map.tobytes())
-        db.save()
-    except:
-        print()
-    a = np.frombuffer(HeatMap.objects.all()[0].data)
-    print("1")
+    return heat_map
 
 
 def check_heat_map_index(x, y):
@@ -56,6 +49,19 @@ def get_weights(event, loop):
     people_count_coff = event.peopleCount * 1.25
     price_coff = event.price * 0.10
     return distribution * people_count_coff * price_coff
+
+
+def check_fit_event(coordinates):
+    try:
+        heat_map = update_heat_map()
+        if not check_heat_map_index(coordinates[0], coordinates[1]):
+            return False
+        x, y = get_cell_location(coordinates[0], coordinates[1])
+        if heat_map[x, y] < 1000:
+            return False
+        return True
+    except:
+        return False
 
 
 def drawing_weights(event, heat_map, start_coordinates, loops):
