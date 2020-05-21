@@ -1,6 +1,15 @@
 # WheelBoostBackend
 Backend solution for WheelBoost app.
 
+## Build Requirements:
++ UNIX system (Mac OS / Ubuntu / etc)
++ python 3.6 or greater
++ pip3
++ venv
++ At least 1 CPU
++ 512MB RAM at least
++ [req.txt](https://github.com/Costello1329/WheelBoostBackend/blob/master/req.txt)
+
 ## How to init:
 + Clone this repository
 + Open project in PyCharm and run the next command in terminal: `python3 -m venv venv`.
